@@ -6,7 +6,8 @@ import {
   Notification,
 } from '../types';
 
-const API_BASE = 'http://localhost:3042/api';
+const TBM_URL = process.env.EXPO_PUBLIC_TBM_URL || 'http://localhost:3042';
+const API_BASE = `${TBM_URL}/api`;
 
 async function request<T>(
   endpoint: string,
