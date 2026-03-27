@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import { DashboardScreen } from '../screens/DashboardScreen';
@@ -10,8 +11,31 @@ import { AnalyticsScreen } from '../screens/AnalyticsScreen';
 import { WhatsAppScreen } from '../screens/WhatsAppScreen';
 import { PersonasScreen } from '../screens/PersonasScreen';
 import { NotificationsScreen } from '../screens/NotificationsScreen';
+import { MoreScreen } from '../screens/MoreScreen';
+import { AICaptionScreen } from '../screens/AICaptionScreen';
+import { ContentScoringScreen } from '../screens/ContentScoringScreen';
+import { BatchScheduleScreen } from '../screens/BatchScheduleScreen';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const MoreStack: React.FC = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: colors.background },
+      }}
+    >
+      <Stack.Screen name="MoreHome" component={MoreScreen} />
+      <Stack.Screen name="AICaption" component={AICaptionScreen} />
+      <Stack.Screen name="ContentScoring" component={ContentScoringScreen} />
+      <Stack.Screen name="BatchSchedule" component={BatchScheduleScreen} />
+      <Stack.Screen name="PersonasTab" component={PersonasScreen} />
+      <Stack.Screen name="NotificationsTab" component={NotificationsScreen} />
+    </Stack.Navigator>
+  );
+};
 
 const tabConfig: Record<string, { icon: string; label: string }> = {
   Dashboard: { icon: 'grid', label: 'Home' },
@@ -19,8 +43,7 @@ const tabConfig: Record<string, { icon: string; label: string }> = {
   QuickPost: { icon: 'add-circle', label: 'Post' },
   Analytics: { icon: 'bar-chart', label: 'Analytics' },
   WhatsApp: { icon: 'logo-whatsapp', label: 'WhatsApp' },
-  Personas: { icon: 'people', label: 'Personas' },
-  Notifications: { icon: 'notifications', label: 'Alerts' },
+  More: { icon: 'apps', label: 'More' },
 };
 
 export const TabNavigator: React.FC = () => {
@@ -33,7 +56,7 @@ export const TabNavigator: React.FC = () => {
         tabBarInactiveTintColor: colors.textMuted,
         tabBarShowLabel: true,
         tabBarLabelStyle: styles.tabLabel,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           const config = tabConfig[route.name];
           const iconName = focused ? config.icon : `${config.icon}-outline`;
           return (
@@ -42,7 +65,7 @@ export const TabNavigator: React.FC = () => {
             </View>
           );
         },
-        tabBarLabel: ({ focused, color }) => {
+        tabBarLabel: ({ color }) => {
           const config = tabConfig[route.name];
           return (
             <Text style={[styles.tabLabel, { color }]}>{config.label}</Text>
@@ -55,8 +78,7 @@ export const TabNavigator: React.FC = () => {
       <Tab.Screen name="QuickPost" component={QuickPostScreen} />
       <Tab.Screen name="Analytics" component={AnalyticsScreen} />
       <Tab.Screen name="WhatsApp" component={WhatsAppScreen} />
-      <Tab.Screen name="Personas" component={PersonasScreen} />
-      <Tab.Screen name="Notifications" component={NotificationsScreen} />
+      <Tab.Screen name="More" component={MoreStack} />
     </Tab.Navigator>
   );
 };
